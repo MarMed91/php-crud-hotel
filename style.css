@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background: white;
+  color: white;
+
+  text-align: center;
+}
+
+h1 {
+
+  background: blue;
+  color: white;
+
+  text-align: center;
+}
+
+.prices {
+
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.price {
+
+  width: 200px;
+  height: 200px;
+
+  margin: auto;
+  padding: 20px;
+
+  border: 2px solid black;
+  background: #ddd;
+}
