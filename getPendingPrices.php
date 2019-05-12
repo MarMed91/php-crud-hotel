@@ -1,8 +1,6 @@
+
+
 <?php
-
-if ($_POST["id"]) {
-
-$id = $_POST["id"];
 
 $servername = "localhost"; // dati
 $username = "root";
@@ -20,10 +18,10 @@ if ($conn ->connect_errno ) { //validazione connessione
 //buona connessione se bypassiamo parte prima;
 
 $sql = "
-          SELECT created_at
+          SELECT id, price
           FROM pagamenti
-          WHERE id = $id
-
+          WHERE status LIKE 'pending'
+          ORDER BY price DESC
 ";
 
 $result = $conn->query($sql); //lanciamo query e passiamo variabile sql;
@@ -40,6 +38,6 @@ if ($result->num_rows > 0) {
     echo "0 results";
   }
   $conn->close(); //chiudo connessione;
-}
+
   echo json_encode($res);
  ?>

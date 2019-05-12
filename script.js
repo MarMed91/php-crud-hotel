@@ -1,70 +1,37 @@
 
-function updatePrice() {
+function printPendingPrice() {
 
-  var me = $(this);
-  var priceHTML = me.parent();
-  var id = priceHTML.data("id");
-  var titleHTML = priceHTML.find("h1.title");
-  var newPrice = prompt("Give me new price");
+  var container = $(".prices");
+  container.find(".price").remove();
 
   $.ajax({
 
-    url: "updatePagamentiByPrice.php",
-    data: {
-      id:id,
-      price: newPrice
-    },
-    method: "POST",
-    success: function(data) {
-      printPendingPrice();
-    }
-  });
-}
-
-function printOspiti() {
-
-  $.ajax({
-    url:"getAllOspiti.php",
+    url: "getPendingPrices.php",
     method: "GET",
     success: function(data) {
 
-      var ospiti = JSON.parse(data);
+        var prices = JSON.parse(data);
 
-      var template = $("#person-template").html();
-      var compiled = Handlebars.compile(template);
+        var container = $(".prices");
 
-      var container = $(".ospiti");
-      for (var i = 0; i < ospiti.length; i++) {
-        var ospite = ospiti[i];
+        var template = $("#person-template").html();
+        var compiled = Handlebars.compile(template);
 
-        var finalHTML = compiled(ospite);
-        container.append(finalHTML);
-      }
+        for (var i = 0; i < prices.length; i++) {
+          var price = prices[i];
+
+          var finalHTML = compiled(price);
+          container.append(finalHTML);
+        }
     }
   });
-}
 
-function deletePagamento() {
-
-    var me = $(this);
-    var priceHTML = me.parent();
-    var id = priceHTML.attr("id");
-
-    $.ajax({
-
-      url: "deleteByPagamenti.php",
-      data: { id: id },
-      method: "POST",
-      success: function(data) {
-        printPendingPrice();
-      }
-    });
 }
 
 function priceClick() {
 
   var me = $(this);
-  var id = me.attr("id");
+  var id = me.data("id");
 
   $.ajax({
 
@@ -76,49 +43,57 @@ function priceClick() {
       var created_at = JSON.parse(data);
 
       var created_atLi = me.find(".created_at");
-      created_atLi.text(created_at[0])["created_at"];
+      created_atLi.text(created_at[0]["created_at"]);
     }
   });
 }
 
-function printPendingPrice() {
+function deletePagamento() {
 
-    var priceCont = $(".prices");
-    priceCont.find("price").remove();
+  var me = $(this);
+  var id = me.parent().data("id");
 
-    $.ajax({
+  $.ajax({
 
-      url: "getPendingPrice.php",
+    url: "deletePagamentiById.php",
+    data: { id: id },
+    method: "POST",
+    success: function(data) {
+      printPendingPrice();
+    }
+  });
+}
 
-      method: "GET",
-      success: function(data) {
+function updatePrice() {
 
-        var prices =  JSON.parse(data);
+  var me = $(this);
+  var priceHTML = me.parent();
+  var id = priceHTML.data("id");
+  var titleH1 = priceHTML.find("h1.title");
 
-        var template = $("#person-template").html();
-        var compiled = Handlebars.compile(template);
+  var newPrice = prompt("Give me new price");
 
-        var priceCont = $(".prices");
+  $.ajax({
 
-        for (var i = 0; i < prices.length; i++) {
-
-           var price = prices[i];
-
-           var priceHTML = compiled(price);
-           priceCont.append(priceHTML);
-        }
-      }
-    });
+    url: "updatePagamentiById.php",
+    data: {
+      id: id,
+      price: newPrice
+    },
+    method: "POST",
+    success: function(data) {
+      printPendingPrice();
+    }
+  });
 }
 
 function init() {
 
-//  printOspiti();
-  printPendingPrice();
 
-  $(document).on("click", ".price", priceClick)
-  $(document).on("click", ".price .price", deletePagamento);
-  $(document).on("click", ".price .edit", updatePrice);
+  printPendingPrice();
+  $(document).on("click", ".price", priceClick);
+  $(document).on("click", ".delete", deletePagamento);
+  $(document).on("click", ".edit", updatePrice);
 }
 
 $(document).ready(init);
