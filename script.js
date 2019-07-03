@@ -43,7 +43,7 @@ function priceClick() {
       var created_at = JSON.parse(data);
 
       var created_atLi = me.find(".created_at");
-      created_atLi.text(created_at[0]["created_at"]);
+      created_atLi.text(created_at[id]["created_at"]);
     }
   });
 }

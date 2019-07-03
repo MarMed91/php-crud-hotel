@@ -27,10 +27,9 @@ $sql = "
 ";
 
 $result = $conn->query($sql); //lanciamo query e passiamo variabile sql;
-
+);
 $res = [];
 if ($result->num_rows > 0) {
-
     while ($row = $result->fetch_assoc()) { //cicli su variabili della tabella e iesima riga ce la mette nella row;
       $res[] = $row;
     }
@@ -41,5 +40,5 @@ if ($result->num_rows > 0) {
   }
   $conn->close(); //chiudo connessione;
 }
-  echo json_encode($res);
+ echo json_encode($res);
  ?>
